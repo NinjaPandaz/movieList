@@ -156,30 +156,41 @@
         }
   
         function saveMovieList() {
-            localStorage.setItem("movieList", JSON.stringify(movieList));
-            // Save the movie list to GitHub Pages using the GitHub API
-            var xhr = new XMLHttpRequest();
-            xhr.open("GET", "https://api.github.com/repos/<username>/<repository>/commits?path=movies.json");
-            xhr.setRequestHeader("Authorization", "Bearer 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");
-            xhr.onload = function() {
-                var commits = JSON.parse(xhr.responseText);
-                var sha = commits[1].sha; // get SHA of second commit
-                console.log("SHA of previous commit:", sha);
-                var xhr2 = new XMLHttpRequest();
-                xhr2.open("PUT", "https://api.github.com/repos/<username>/<repository>/contents/movies.json");
-                xhr2.setRequestHeader("Authorization", "Bearer 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");
-                xhr2.onload = function() {
-                console.log(xhr2.responseText);
-                };
-                var data = {
-                "message": "Update movie list",
-                "content": btoa(JSON.stringify(movieList)),
-                "sha": sha
-                };
-                xhr2.send(JSON.stringify(data));
+  // Update watched state of each movie in movieList
+          var movieListElement = document.getElementById("movieList");
+          for (var i = 0; i < movieList.length; i++) {
+            var movie = movieList[i];
+            var li = movieListElement.getElementsByTagName("li")[i];
+            movie.watched = li.querySelector("input[type=checkbox]").checked;
+          }
+
+          // Save the movie list to local storage
+          localStorage.setItem("movieList", JSON.stringify(movieList));
+
+          // Save the movie list to GitHub Pages using the GitHub API
+          var xhr = new XMLHttpRequest();
+          xhr.open("GET", "https://api.github.com/repos/<username>/<repository>/commits?path=movies.json");
+          xhr.setRequestHeader("Authorization", "Bearer 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");
+          xhr.onload = function() {
+            var commits = JSON.parse(xhr.responseText);
+            var sha = commits[0].sha;
+            console.log("SHA of previous commit:", sha);
+            var xhr2 = new XMLHttpRequest();
+            xhr2.open("PUT", "https://api.github.com/repos/<username>/<repository>/contents/movies.json");
+            xhr2.setRequestHeader("Authorization", "Bearer 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");
+            xhr2.onload = function() {
+              console.log(xhr2.responseText);
             };
-            xhr.send();
+            var data = {
+              "message": "Update movie list",
+              "content": btoa(JSON.stringify(movieList)),
+              "sha": sha
+            };
+            xhr2.send(JSON.stringify(data));
+          };
+          xhr.send();
         }
+
 
   
         function toggleDarkMode() {
