@@ -124,18 +124,12 @@
         });
       }
   
-        function addMovie() {
-          var movieName = document.getElementById("movieName").value;
-          if (movieName === "") {
-            alert("Please enter a movie name.");
-          } else {
-            var list = document.getElementById("movieList");
-            var li = document.createElement("li");
-            li.appendChild(document.createTextNode(movieName));
-            list.appendChild(li);
-            localStorage.setItem("movies", list.innerHTML);
-            document.getElementById("movieName").value = "";
-          }
+       function addMovie() {
+          var newMovie = { title: document.getElementById("newMovie").value, watched: false };
+          movieList.push(newMovie);
+          saveMovieList();
+          updateMovieList();
+          document.getElementById("newMovie").value = "";
         }
   
         function clearMovieList() {
