@@ -28,6 +28,11 @@
         background-color: #f2f2f2;
         border-radius: 5px;
       }
+      
+      li.checked {
+        color: #888;
+        text-decoration: line-through;
+      }
 
       label {
         display: block;
@@ -116,6 +121,7 @@
           checkbox.checked = false;
           checkbox.onclick = function() {
             movieList[index].watched = checkbox.checked;
+            li.classList.toggle("checked");
             saveMovieList();
           };
           li.appendChild(checkbox);
