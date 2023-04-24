@@ -112,23 +112,34 @@
         updateMovieList();
   
         function updateMovieList() {
-        var movieListElement = document.getElementById("movieList");
-        movieListElement.innerHTML = "";
-        movieList.forEach(function(movie, index) {
-          var li = document.createElement("li");
-          var checkbox = document.createElement("input");
-          checkbox.type = "checkbox";
-          checkbox.checked = false;
-          checkbox.onclick = function() {
-            movieList[index].watched = checkbox.checked;
-            li.classList.toggle("checked");
-            saveMovieList();
-          };
-          li.appendChild(checkbox);
-          li.appendChild(document.createTextNode(movie.title));
-          movieListElement.appendChild(li);
-        });
-      }
+            var movieListElement = document.getElementById("movieList");
+            movieListElement.innerHTML = "";
+            movieList.forEach(function(movie, index) {
+              var li = document.createElement("li");
+              var checkbox = document.createElement("input");
+              checkbox.type = "checkbox";
+              checkbox.checked = movie.watched;
+              checkbox.onclick = function() {
+                movieList[index].watched = checkbox.checked;
+                li.classList.toggle("checked");
+                saveMovieList();
+              };
+              var movieTitle = document.createElement("span");
+              movieTitle.innerText = movie.title;
+              var deleteButton = document.createElement("button");
+              deleteButton.innerText = "Delete";
+              deleteButton.onclick = function() {
+                movieList.splice(index, 1);
+                saveMovieList();
+                updateMovieList();
+              };
+              li.appendChild(checkbox);
+              li.appendChild(movieTitle);
+              li.appendChild(deleteButton);
+              movieListElement.appendChild(li);
+            });
+          }
+
   
        function addMovie() {
           var newMovie = { title: document.getElementById("newMovie").value, watched: false };
