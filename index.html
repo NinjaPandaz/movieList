@@ -164,14 +164,14 @@
           // Save the movie list to GitHub Pages using the GitHub API
           var xhr = new XMLHttpRequest();
           xhr.open("GET", "https://api.github.com/repos/NinjaPandaz/movieList/commits?path=movies.json");
-          xhr.setRequestHeader("Authorization", "Bearer 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");
+          xhr.setRequestHeader("Authorization", "Bearer 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");
           xhr.onload = function() {
             var commits = JSON.parse(xhr.responseText);
             var sha = commits[0].sha;
             console.log("SHA of previous commit:", sha);
             var xhr2 = new XMLHttpRequest();
             xhr2.open("PUT", "https://api.github.com/repos/NinjaPandaz/movieList/contents/movies.json");
-            xhr2.setRequestHeader("Authorization", "Bearer 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");
+            xhr2.setRequestHeader("Authorization", "Bearer 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");
             xhr2.onload = function() {
               console.log(xhr2.responseText);
             };
